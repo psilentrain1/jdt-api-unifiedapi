@@ -1,18 +1,22 @@
 {
-  "name": "jdt-apps-unifiedapi",
+  "name": "jdt-api-unifiedapi",
   "version": "0.0.1",
   "description": "Unified API for applications across the JDT platform.",
   "license": "ISC",
   "author": "James Drake",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "src/server.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node src/server.ts",
+    "build": "tsc",
+    "serve": "node dist/server.js"
   },
   "dependencies": {
     "better-sqlite3": "^12.5.0",
     "cors": "^2.8.5",
-    "express": "^5.2.1"
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
