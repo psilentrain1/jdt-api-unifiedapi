@@ -1,68 +1,24 @@
-import sqlite from "better-sqlite3";
 import { client } from "../../services/mongo";
 import "dotenv/config";
-import fs from "fs";
 import type { Ride } from "../utils/types";
-
-// FIXME: Will be removed in favor of MongoDB
-const dbLoc = "./rideshare.db";
-const db = new sqlite(dbLoc);
+import type { ObjectId, WithId } from "mongodb";
 
 const database = client.db("jdt_apps_rideshare");
 const collection = database.collection<Ride>("ride");
 
 // TODO: Add JSDoc
 
-// FIXME: Will need to change
-export function dbStartupCheck() {
-  console.log("Checking for database file...");
-  const file = fs.readFileSync(dbLoc);
-  if (file) {
-    if (file.length === 0) {
-      console.log("Database file empty...initializing.");
-      createDB();
-    }
-  } else {
-    console.log("Database file not found...");
-    try {
-      const file = fs.openSync(dbLoc, "w");
-      fs.closeSync(file);
-      console.log("Database file created. Initializing.");
-      createDB();
-    } catch (error) {
-      if (error) throw error;
-    }
-  }
-}
-
-function createDB() {
-  const rideTableQuery = `CREATE TABLE ride (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    service TEXT NOT NULL,
-    start_time TEXT NOT NULL,
-    account TEXT NOT NULL,
-    fare REAL NOT NULL,
-    fee REAL,
-    tip REAL,
-    modified_at TEXT NOT NULL,
-    deleted_at TEXT
-    );`;
-
-  db.prepare(rideTableQuery).run();
-}
-
-// TODO: Set return type
-export async function getAllRides() {
+export async function getAllRides(): Promise<WithId<Ride>[]> {
   const findResult = collection.find({ deleted_at: null });
 
+  const results = [];
   for await (const doc of findResult) {
-    return doc;
+    results.push(doc);
   }
+  return results;
 }
 
-// TODO: id type
-// TODO: return type
-export function getOneRide(id) {
+export function getOneRide(id: ObjectId): Promise<WithId<Ride> | null> {
   const findResult = collection.findOne({ _id: id, deleted_at: null });
 
   return findResult;
@@ -88,7 +44,6 @@ export async function addRide(ride: Ride): Promise<boolean> {
   }
 }
 
-// FIXME: Fix _id type
 export async function updateRide(ride: Ride): Promise<boolean> {
   const now = new Date().toISOString();
   const query = { _id: ride.id };
@@ -113,8 +68,7 @@ export async function updateRide(ride: Ride): Promise<boolean> {
   }
 }
 
-// FIXME: Fix _id type
-export async function deleteRide(id): Promise<boolean> {
+export async function deleteRide(id: ObjectId): Promise<boolean> {
   const now = new Date().toISOString();
   const query = { _id: id };
   const update = {
