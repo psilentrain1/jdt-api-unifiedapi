@@ -2,6 +2,7 @@ import express from "express";
 import "dotenv/config";
 import { logger } from "./services/logging";
 import { router as workoutRoutes } from "./jdt-apps-workouts/routes/workouts";
+import { router as ridheshareRoutes } from "./jdt-apps-rideshare/routes/rideshare";
 
 const log = logger.child({ module: "Server" });
 const app = express();
@@ -15,6 +16,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/workouts", workoutRoutes);
+app.use("/rides", ridheshareRoutes);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
