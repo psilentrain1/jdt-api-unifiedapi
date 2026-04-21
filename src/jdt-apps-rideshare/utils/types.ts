@@ -7,5 +7,5 @@ export interface Ride {
   fee: number;
   tip: number;
   modified_at?: string;
-  deleted_at?: string;
+  deleted_at?: string | null;
 }

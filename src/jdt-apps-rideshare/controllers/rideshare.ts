@@ -1,9 +1,15 @@
 import sqlite from "better-sqlite3";
+import { client } from "../../services/mongo";
+import "dotenv/config";
 import fs from "fs";
 import type { Ride } from "../utils/types";
 
+// FIXME: Will be removed in favor of MongoDB
 const dbLoc = "./rideshare.db";
 const db = new sqlite(dbLoc);
+
+const database = client.db("jdt_apps_rideshare");
+const collection = database.collection<Ride>("ride");
 
 // TODO: Add JSDoc
 
@@ -45,74 +51,83 @@ function createDB() {
   db.prepare(rideTableQuery).run();
 }
 
-export function getAllRides(): Ride[] {
-  const stmt = db.prepare("SELECT * FROM ride WHERE deleted_at IS NULL;");
+// TODO: Set return type
+export async function getAllRides() {
+  const findResult = collection.find({ deleted_at: null });
 
-  return stmt.all() as Ride[];
+  for await (const doc of findResult) {
+    return doc;
+  }
 }
 
-export function getOneRide(id: number): Ride {
-  const stmt = db.prepare("SELECT * FROM ride WHERE id = ?;");
+// TODO: id type
+// TODO: return type
+export function getOneRide(id) {
+  const findResult = collection.findOne({ _id: id, deleted_at: null });
 
-  return stmt.get(id) as Ride;
+  return findResult;
 }
 
-export function addRide(ride: Ride): boolean {
-  const stmt = db.prepare(
-    "INSERT INTO ride (service, start_time, account, fare, fee, tip, modified_at) VALUES (?, ?, ?, ?, ?, ?, ?);",
-  );
+export async function addRide(ride: Ride): Promise<boolean> {
   const now = new Date().toISOString();
 
-  const result = stmt.run(
-    ride.service,
-    ride.start_time,
-    ride.account,
-    ride.fare,
-    ride.fee,
-    ride.tip,
-    now,
-  );
+  try {
+    const result = await collection.insertOne({
+      service: ride.service,
+      start_time: ride.start_time,
+      account: ride.account,
+      fare: ride.fare,
+      fee: ride.fee,
+      tip: ride.tip,
+      modified_at: now,
+    });
 
-  if (result.changes > 0) {
-    return true;
+    return result.acknowledged;
+  } catch (error) {
+    return false;
   }
-
-  return false;
 }
 
-export function updateRide(ride: Ride): boolean {
-  const stmt = db.prepare(
-    "UPDATE ride SET service = ?, start_time = ?, account = ?, fare = ?, fee = ?, tip = ?, modified_at = ? WHERE id = ?;",
-  );
+// FIXME: Fix _id type
+export async function updateRide(ride: Ride): Promise<boolean> {
   const now = new Date().toISOString();
+  const query = { _id: ride.id };
+  const update = {
+    $set: {
+      service: ride.service,
+      start_time: ride.start_time,
+      account: ride.account,
+      fare: ride.fare,
+      fee: ride.fee,
+      tip: ride.tip,
+      modified_at: now,
+    },
+  };
+  const options = {};
 
-  const result = stmt.run(
-    ride.service,
-    ride.start_time,
-    ride.account,
-    ride.fare,
-    ride.fee,
-    ride.tip,
-    now,
-    ride.id,
-  );
-
-  if (result.changes > 0) {
-    return true;
+  try {
+    const result = await collection.updateOne(query, update, options);
+    return result.acknowledged;
+  } catch (error) {
+    return false;
   }
-
-  return false;
 }
 
-export function deleteRide(id: number): boolean {
-  const stmt = db.prepare("UPDATE ride SET deleted_at = ? WHERE id = ?;");
+// FIXME: Fix _id type
+export async function deleteRide(id): Promise<boolean> {
   const now = new Date().toISOString();
+  const query = { _id: id };
+  const update = {
+    $set: {
+      deleted_at: now,
+    },
+  };
+  const options = {};
 
-  const result = stmt.run(now, id);
-
-  if (result.changes > 0) {
-    return true;
+  try {
+    const result = await collection.updateOne(query, update, options);
+    return result.acknowledged;
+  } catch (error) {
+    return false;
   }
-
-  return false;
 }
