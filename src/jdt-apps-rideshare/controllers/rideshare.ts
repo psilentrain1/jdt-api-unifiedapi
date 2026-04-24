@@ -10,6 +10,10 @@ const collection = database.collection<Ride>("ride");
 
 // TODO: Add JSDoc
 
+/**
+ * Gets a list of all saved rides.
+ * @returns Array of Ride objects
+ */
 export async function getAllRides(): Promise<WithId<Ride>[]> {
   log.trace("getAllRides()");
   const findResult = collection.find({ deleted_at: null });
@@ -21,6 +25,11 @@ export async function getAllRides(): Promise<WithId<Ride>[]> {
   return results;
 }
 
+/**
+ * Gets one ride object.
+ * @param id ObjectId that corresponds to one ride
+ * @returns Ride object
+ */
 export function getOneRide(id: ObjectId): Promise<WithId<Ride> | null> {
   log.trace(`getOneRide() id: ${id}`);
   const findResult = collection.findOne({ _id: id, deleted_at: null });
@@ -28,6 +37,11 @@ export function getOneRide(id: ObjectId): Promise<WithId<Ride> | null> {
   return findResult;
 }
 
+/**
+ * Adds one ride to the database.
+ * @param ride Ride object
+ * @returns Success boolean
+ */
 export async function addRide(ride: Ride): Promise<boolean> {
   log.trace(`addRide() ride.start_time: ${ride.start_time}`);
   const now = new Date().toISOString();
@@ -50,6 +64,11 @@ export async function addRide(ride: Ride): Promise<boolean> {
   }
 }
 
+/**
+ * Updates one ride.
+ * @param ride Ride object
+ * @returns Success boolean
+ */
 export async function updateRide(ride: Ride): Promise<boolean> {
   log.trace(`updateRide() ride.start_time: ${ride.start_time}`);
   const now = new Date().toISOString();
@@ -76,6 +95,11 @@ export async function updateRide(ride: Ride): Promise<boolean> {
   }
 }
 
+/**
+ * Marks one ride as deleted.
+ * @param id ObjectId to be marked as deleted
+ * @returns Success boolean
+ */
 export async function deleteRide(id: ObjectId): Promise<boolean> {
   log.trace(`deleteRide() id: ${id}`);
   const now = new Date().toISOString();
