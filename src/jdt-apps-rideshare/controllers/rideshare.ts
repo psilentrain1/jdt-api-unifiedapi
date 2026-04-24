@@ -1,5 +1,4 @@
 import { client } from "../../services/mongo";
-import "dotenv/config";
 import type { Ride } from "../utils/types";
 import type { ObjectId, WithId } from "mongodb";
 import { logger } from "../../services/logging";

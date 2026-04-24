@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "ping" });
 });
 
-app.use("/workouts", workoutRoutes);
+// app.use("/workouts", workoutRoutes);
 app.use("/rides", ridheshareRoutes);
 
 app.listen(PORT, () => {
