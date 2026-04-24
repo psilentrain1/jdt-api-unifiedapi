@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import "dotenv/config";
 import { logger } from "./services/logging";
 import { router as workoutRoutes } from "./jdt-apps-workouts/routes/workouts";
@@ -9,6 +10,11 @@ const app = express();
 const PORT = Number(process.env.SERVER_PORT);
 
 app.use(express.json({ limit: "10mb" }));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  }),
+);
 
 app.get("/", (req, res) => {
   log.trace(`GET /`);
