@@ -8,6 +8,7 @@ import { router as foodRoutes } from "./jdt-apps-workouts/routes/food";
 import { router as measurementRoutes } from "./jdt-apps-workouts/routes/measurements";
 import { router as summariesRoutes } from "./jdt-apps-workouts/routes/summaries";
 import { router as rideshareRoutes } from "./jdt-apps-rideshare/routes/rideshare";
+import { router as jmdmRoutes } from "./jmdm-webdev-jmdm-vanilla/routes/jmdm";
 
 const log = logger.child({ module: "Server" });
 const app = express();
@@ -33,6 +34,8 @@ app.use("/measurements", measurementRoutes);
 app.use("/summaries", summariesRoutes);
 */
 app.use("/rides", rideshareRoutes);
+
+app.use("/jmdm", jmdmRoutes);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
