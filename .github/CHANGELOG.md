@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.1.3
+- Corrected deploy workflow
+
 ## 0.1.2
 - Temporarily disabling pino file logging
 
