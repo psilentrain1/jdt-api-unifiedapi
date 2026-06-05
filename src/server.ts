@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
+import { client } from "./services/mongo";
 import { logger } from "./services/logging";
 import { router as rideshareRoutes } from "./jdt-apps-rideshare/routes/rideshare";
 import { router as jmdmRoutes } from "./jmdm-webdev-jmdm-vanilla/routes/jmdm";
@@ -26,7 +27,25 @@ app.use("/rides", rideshareRoutes);
 
 app.use("/jmdm", jmdmRoutes);
 
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
-  log.trace(`App started on port ${PORT}`);
+client
+  .connect()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`App listening on port ${PORT}`);
+      log.trace(`App started on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Failed to connect to MongoDB", err);
+    process.exit(1);
+  });
+
+process.on("SIGTERM", async () => {
+  await client.close();
+  log.info("SIGTERM, closing MongoDB connection.");
+});
+
+process.on("SIGINT", async () => {
+  await client.close();
+  log.info("SIGINT, closing MongoDB connection.");
 });

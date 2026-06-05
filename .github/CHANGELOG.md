@@ -2,6 +2,7 @@
 
 ## 0.1.3
 - Corrected deploy workflow
+- Added MongoDB connect and close functions
 
 ## 0.1.2
 - Temporarily disabling pino file logging
