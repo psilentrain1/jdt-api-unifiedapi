@@ -1,0 +1,30 @@
+name: Deploy on Merge to Master
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: SSH Deploy
+    # Only run if the PR was actually merged (not just closed)
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /var/www/html/jdt-api-unifiedapi
+            git pull
+            npm install
+            npm run build
+            pm2 restart unifiedapi
