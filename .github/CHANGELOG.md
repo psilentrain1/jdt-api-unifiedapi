@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.1.2
+- Temporarily disabling pino file logging
+
 ## 0.1.1
 - refactor: Temporarily removed jdt-apps-workouts routes and controllers
 
