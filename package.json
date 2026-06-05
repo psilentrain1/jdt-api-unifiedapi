@@ -1,6 +1,6 @@
 {
   "name": "jdt-api-unifiedapi",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Unified API for applications across the JDT ecosystem.",
   "license": "ISC",
   "author": "James Drake",
@@ -12,7 +12,6 @@
     "serve": "node dist/server.js"
   },
   "dependencies": {
-    "better-sqlite3": "^12.5.0",
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
@@ -21,7 +20,6 @@
     "zod": "^4.3.5"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.13",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^25.0.3",
