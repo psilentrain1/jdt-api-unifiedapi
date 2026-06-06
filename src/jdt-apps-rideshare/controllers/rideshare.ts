@@ -5,10 +5,11 @@ import { logger } from "../../services/logging";
 
 const log = logger.child({ module: "Rideshare Controllers" });
 
-const database = client.db("jdt_apps_rideshare");
-const collection = database.collection<Ride>("ride");
-
 // TODO: Add JSDoc
+
+function getCollection() {
+  return client.db("jdt_apps_rideshare").collection<Ride>("ride");
+}
 
 /**
  * Gets a list of all saved rides.
@@ -16,7 +17,7 @@ const collection = database.collection<Ride>("ride");
  */
 export async function getAllRides(): Promise<WithId<Ride>[]> {
   log.trace("getAllRides()");
-  const findResult = collection.find({ deleted_at: null });
+  const findResult = getCollection().find({ deleted_at: null });
 
   const results = [];
   for await (const doc of findResult) {
@@ -32,7 +33,7 @@ export async function getAllRides(): Promise<WithId<Ride>[]> {
  */
 export function getOneRide(id: ObjectId): Promise<WithId<Ride> | null> {
   log.trace(`getOneRide() id: ${id}`);
-  const findResult = collection.findOne({ _id: id, deleted_at: null });
+  const findResult = getCollection().findOne({ _id: id, deleted_at: null });
 
   return findResult;
 }
@@ -47,7 +48,7 @@ export async function addRide(ride: Ride): Promise<boolean> {
   const now = new Date().toISOString();
 
   try {
-    const result = await collection.insertOne({
+    const result = await getCollection().insertOne({
       service: ride.service,
       start_time: ride.start_time,
       account: ride.account,
@@ -87,7 +88,7 @@ export async function updateRide(ride: Ride): Promise<boolean> {
   const options = {};
 
   try {
-    const result = await collection.updateOne(query, update, options);
+    const result = await getCollection().updateOne(query, update, options);
     return result.acknowledged;
   } catch (error) {
     log.info(`updateRide() error: ${error}`);
@@ -112,7 +113,7 @@ export async function deleteRide(id: ObjectId): Promise<boolean> {
   const options = {};
 
   try {
-    const result = await collection.updateOne(query, update, options);
+    const result = await getCollection().updateOne(query, update, options);
     return result.acknowledged;
   } catch (error) {
     log.info(`deleteRide() error: ${error}`);

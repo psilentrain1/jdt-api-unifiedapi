@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.1.4
+- Correcting MongoDB connection race condition
+
 ## 0.1.3
 - Corrected deploy workflow
 - Added MongoDB connect and close functions
