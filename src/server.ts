@@ -18,6 +18,15 @@ app.use(express.json({ limit: "10mb" }));
 //   }),
 // );
 
+app.use((req, res, next) => {
+  if (!dbReady) {
+    console.warn(`Request arrived before DB ready: ${req.method} ${req.path}`);
+    res.status(503).json({ message: "Service unavailable, DB not ready." });
+    return;
+  }
+  next();
+});
+
 app.get("/", (req, res) => {
   log.trace(`GET /`);
   res.status(200).json({ message: "ping" });
@@ -27,9 +36,12 @@ app.use("/rides", rideshareRoutes);
 
 app.use("/jmdm", jmdmRoutes);
 
+let dbReady = false;
+
 client
   .connect()
   .then(() => {
+    dbReady = true;
     app.listen(PORT, () => {
       console.log(`App listening on port ${PORT}`);
       log.trace(`App started on port ${PORT}`);
