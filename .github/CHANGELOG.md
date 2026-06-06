@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.1.5
+- Added middleware to prevent requests before DB is ready
+
 ## 0.1.4
 - Correcting MongoDB connection race condition
 
