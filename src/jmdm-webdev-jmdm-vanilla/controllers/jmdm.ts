@@ -5,12 +5,13 @@ import { logger } from "../../services/logging";
 
 const log = logger.child({ module: "JMDM Controllers" });
 
-const database = client.db("jmdm_webdev_jmdm_vanilla");
-const collection = database.collection<Credit>("credit");
+function getCollection() {
+  return client.db("jmdm_webdev_jmdm_vanilla").collection<Credit>("credit");
+}
 
 export async function getAllCredits(): Promise<WithId<Credit>[]> {
   log.trace("getAllCredits()");
-  const findResult = collection.find();
+  const findResult = getCollection().find();
 
   const results = [];
   for await (const doc of findResult) {
