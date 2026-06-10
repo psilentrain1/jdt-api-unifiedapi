@@ -50,7 +50,9 @@ app.get("/", (req, res) => {
 
 app.use("/rides", rideshareRoutes);
 
-app.use("/jmdm", jmdmRoutes);
+app.use("/jmdm-v1", jmdmRoutes);
+
+app.use("/jmdm", jmdm26Routes);
 
 Sentry.setupExpressErrorHandler(app);
 
