@@ -3,9 +3,9 @@ import type { ObjectId } from "mongodb";
 export interface SiteSetting {
   id?: ObjectId;
   setting: string;
-  value?: string;
-  modified_at: string;
-  deleted_at?: string;
+  value?: string | null;
+  modified_at?: string;
+  deleted_at?: string | null;
 }
 
 export interface Credit {
@@ -13,13 +13,13 @@ export interface Credit {
   category: "production" | "music" | "other";
   position: string;
   title: string;
-  type?: string;
-  network?: string;
-  company?: string;
-  date_start?: string;
-  date_end?: string;
-  modified_at: string;
-  deleted_at?: string;
+  type?: string | null;
+  network?: string | null;
+  company?: string | null;
+  date_start?: string | null;
+  date_end?: string | null;
+  modified_at?: string;
+  deleted_at?: string | null;
 }
 
 export interface ResumeInfo {
@@ -27,8 +27,8 @@ export interface ResumeInfo {
   name: string;
   email: string;
   phone: number;
-  modified_at: string;
-  deleted_at?: string;
+  modified_at?: string;
+  deleted_at?: string | null;
 }
 
 export interface Experience {
@@ -36,12 +36,12 @@ export interface Experience {
   type: "education" | "work" | "certification";
   name: string;
   company: string;
-  date_start?: string;
-  date_end?: string;
-  location?: string;
-  description?: string;
-  modified_at: string;
-  deleted_at?: string;
+  date_start?: string | null;
+  date_end?: string | null;
+  location?: string | null;
+  description?: string | null;
+  modified_at?: string;
+  deleted_at?: string | null;
 }
 
 export interface Post {
@@ -50,6 +50,6 @@ export interface Post {
   status: "draft" | "published" | "archived";
   content: string;
   author: ObjectId;
-  modified_at: string;
-  deleted_at?: string;
+  modified_at?: string;
+  deleted_at?: string | null;
 }
