@@ -38,33 +38,6 @@ app.use("/rides", rideshareRoutes);
 
 app.use("/jmdm", jmdmRoutes);
 
-// Sentry Test Route
-app.get("/debug-sentry", async (req, res) => {
-  await Sentry.startSpan(
-    {
-      op: "test",
-      name: "My First Test Transaction",
-    },
-    async () => {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      throw new Error("My first Sentry error!");
-    },
-  );
-});
-
-// Sentry Test Logs
-Sentry.logger.info("User example action completed");
-
-Sentry.logger.warn("Slow operation detected", {
-  operation: "data_fetch",
-  duration: 3500,
-});
-
-Sentry.logger.error("Validation failed", {
-  field: "email",
-  reason: "Invalid email",
-});
-
 Sentry.setupExpressErrorHandler(app);
 
 let dbReady = false;
