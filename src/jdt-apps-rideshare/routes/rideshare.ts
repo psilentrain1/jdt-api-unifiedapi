@@ -1,4 +1,5 @@
 import express from "express";
+import * as Sentry from "@sentry/node";
 import * as db from "../controllers/rideshare";
 import { ObjectId } from "mongodb";
 import { logger } from "../../services/logging";
@@ -9,16 +10,25 @@ export const router = express.Router();
 
 router.get("/", async (req, res) => {
   log.trace("GET /rides");
+  Sentry.logger.trace("GET /rides", {
+    module: "Rideshare Routes",
+  });
   res.send(await db.getAllRides());
 });
 
 router.get("/get/:id", async (req, res) => {
   log.trace("GET /rides/get/:id");
+  Sentry.logger.trace("GET /rides/get/:id", {
+    module: "Rideshare Routes",
+  });
   res.send(await db.getOneRide(ObjectId.createFromHexString(req.params.id)));
 });
 
 router.post("/add", async (req, res) => {
   log.trace("POST /rides/add");
+  Sentry.logger.trace("POST /rides/add", {
+    module: "Rideshare Routes",
+  });
   if (await db.addRide(req.body)) {
     res.status(200).json({ message: "Success." });
   } else {
@@ -28,6 +38,9 @@ router.post("/add", async (req, res) => {
 
 router.put("/update", async (req, res) => {
   log.trace("PUT /rides/update");
+  Sentry.logger.trace("PUT /rides/update", {
+    module: "Rideshare Routes",
+  });
   if (await db.updateRide(req.body)) {
     res.status(200).json({ message: "Success." });
   } else {
@@ -37,6 +50,9 @@ router.put("/update", async (req, res) => {
 
 router.delete("/delete/:id", async (req, res) => {
   log.trace("DELETE /rides/delete/:id");
+  Sentry.logger.trace("DELETE /rides/delete/:id", {
+    module: "Rideshare Routes",
+  });
   if (await db.deleteRide(ObjectId.createFromHexString(req.params.id))) {
     res.status(200).json({ message: "Success." });
   } else {

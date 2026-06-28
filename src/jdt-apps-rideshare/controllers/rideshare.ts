@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node";
 import { client } from "../../services/mongo";
 import type { Ride } from "../utils/types";
 import type { ObjectId, WithId } from "mongodb";
@@ -17,6 +18,9 @@ function getCollection() {
  */
 export async function getAllRides(): Promise<WithId<Ride>[]> {
   log.trace("getAllRides()");
+  Sentry.logger.info("getAllRides()", {
+    module: "Rideshare Controllers",
+  });
   const findResult = getCollection().find({ deleted_at: null });
 
   const results = [];
@@ -33,6 +37,10 @@ export async function getAllRides(): Promise<WithId<Ride>[]> {
  */
 export function getOneRide(id: ObjectId): Promise<WithId<Ride> | null> {
   log.trace(`getOneRide() id: ${id}`);
+  Sentry.logger.info("getOneRide()", {
+    module: "Rideshare Controllers",
+    id: id,
+  });
   const findResult = getCollection().findOne({ _id: id, deleted_at: null });
 
   return findResult;
@@ -45,6 +53,10 @@ export function getOneRide(id: ObjectId): Promise<WithId<Ride> | null> {
  */
 export async function addRide(ride: Ride): Promise<boolean> {
   log.trace(`addRide() ride.start_time: ${ride.start_time}`);
+  Sentry.logger.info("addRide()", {
+    module: "Rideshare Controllers",
+    start_time: ride.start_time,
+  });
   const now = new Date().toISOString();
 
   try {
@@ -61,6 +73,10 @@ export async function addRide(ride: Ride): Promise<boolean> {
     return result.acknowledged;
   } catch (error) {
     log.info(`addRide() error: ${error}`);
+    Sentry.logger.error("addRide() error", {
+      module: "Rideshare Controllers",
+      error: error,
+    });
     return false;
   }
 }
@@ -72,6 +88,10 @@ export async function addRide(ride: Ride): Promise<boolean> {
  */
 export async function updateRide(ride: Ride): Promise<boolean> {
   log.trace(`updateRide() ride.start_time: ${ride.start_time}`);
+  Sentry.logger.info("updateRide()", {
+    module: "Rideshare Controllers",
+    start_time: ride.start_time,
+  });
   const now = new Date().toISOString();
   const query = { _id: ride.id };
   const update = {
@@ -92,6 +112,10 @@ export async function updateRide(ride: Ride): Promise<boolean> {
     return result.acknowledged;
   } catch (error) {
     log.info(`updateRide() error: ${error}`);
+    Sentry.logger.error("updateRide() error", {
+      module: "Rideshare Controllers",
+      error: error,
+    });
     return false;
   }
 }
@@ -103,6 +127,10 @@ export async function updateRide(ride: Ride): Promise<boolean> {
  */
 export async function deleteRide(id: ObjectId): Promise<boolean> {
   log.trace(`deleteRide() id: ${id}`);
+  Sentry.logger.info("deleteRide()", {
+    module: "Rideshare Controllers",
+    id: id,
+  });
   const now = new Date().toISOString();
   const query = { _id: id };
   const update = {
@@ -117,6 +145,10 @@ export async function deleteRide(id: ObjectId): Promise<boolean> {
     return result.acknowledged;
   } catch (error) {
     log.info(`deleteRide() error: ${error}`);
+    Sentry.logger.error("deleteRide() error", {
+      module: "Rideshare Controllers",
+      error: error,
+    });
     return false;
   }
 }
