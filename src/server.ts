@@ -12,12 +12,12 @@ const log = logger.child({ module: "Server" });
 const app = express();
 const PORT = Number(process.env.SERVER_PORT);
 
-app.use(express.json({ limit: "10mb" }));
 app.use(
   cors({
     origin: ["http://localhost:5173", "http://localhost:5174"],
   }),
 );
+app.use(express.json({ limit: "10mb" }));
 
 app.use((req, res, next) => {
   if (!dbReady) {
