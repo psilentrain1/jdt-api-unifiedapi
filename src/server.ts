@@ -13,12 +13,11 @@ const app = express();
 const PORT = Number(process.env.SERVER_PORT);
 
 app.use(express.json({ limit: "10mb" }));
-// FIXME: *:57391 is a temporary origin for Zed server
-// app.use(
-//   cors({
-//     origin: ["http://localhost:5173", "http://127.0.0.1:57391"],
-//   }),
-// );
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://localhost:5174"],
+  }),
+);
 
 app.use((req, res, next) => {
   if (!dbReady) {
