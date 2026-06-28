@@ -24,7 +24,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /var/www/html/jdt-api-unifiedapi
+            git stash
             git pull
             npm install
             npm run build
-            pm2 restart unifiedapi
