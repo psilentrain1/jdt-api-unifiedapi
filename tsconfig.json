@@ -1,13 +1,20 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "CommonJS",
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
     "outDir": "./dist",
     "strict": true,
+    "strictNullChecks": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "exactOptionalPropertyTypes": false,
+    "verbatimModuleSyntax": true,
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"],
+  "ts-node": {
+    "esm": true,
+  },
 }
