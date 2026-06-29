@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth";
+import { bearer } from "better-auth/plugins";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { client } from "./mongo.js";
 import { origins } from "../common/globals.js";
@@ -15,6 +16,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  plugins: [bearer()],
   session: {
     cookieCache: {
       enabled: false,
