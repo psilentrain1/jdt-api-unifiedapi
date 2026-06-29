@@ -13,7 +13,7 @@ Sentry.init({
   // We recommend adjusting this value in production
   // Learn more at
   // https://docs.sentry.io/platforms/javascript/guides/node/configuration/options/#tracesSampleRate
-  tracesSampleRate: 1.0,
+  tracesSampleRate: 0.75,
   // Enable logs to be sent to Sentry
   enableLogs: true,
 });

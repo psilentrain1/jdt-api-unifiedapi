@@ -12,12 +12,12 @@ const log = logger.child({ module: "Server" });
 const app = express();
 const PORT = Number(process.env.SERVER_PORT);
 
-app.use(express.json({ limit: "10mb" }));
 app.use(
   cors({
     origin: ["http://localhost:5173", "http://localhost:5174"],
   }),
 );
+app.use(express.json({ limit: "10mb" }));
 
 app.use((req, res, next) => {
   if (!dbReady) {
@@ -47,12 +47,43 @@ app.use("/jmdm", jmdmRoutes);
 Sentry.setupExpressErrorHandler(app);
 
 let dbReady = false;
+let server: ReturnType<typeof app.listen>;
+
+async function serverShutdown(signal: string) {
+  log.info(`${signal}, shutting down server.`);
+  Sentry.logger.info(`${signal}, shutting down server.`, {
+    module: "Server",
+  });
+
+  server.close(() => {
+    log.info("HTTP server closed.");
+  });
+
+  try {
+    await client.close();
+    log.info("MongoDB connection closed.");
+    Sentry.logger.info("MongoDB connection closed.", {
+      module: "Server",
+    });
+  } catch (err) {
+    log.error(`Error closing MongoDB connection. Error: ${err}`);
+    Sentry.logger.error(`Error closing MongoDB connection.`, {
+      module: "Server",
+      error: err,
+    });
+  }
+
+  process.exit(0);
+}
+
+process.on("SIGTERM", () => serverShutdown("SIGTERM"));
+process.on("SIGINT", () => serverShutdown("SIGINT"));
 
 client
   .connect()
   .then(() => {
     dbReady = true;
-    app.listen(PORT, () => {
+    server = app.listen(PORT, () => {
       console.log(`App listening on port ${PORT}`);
       log.trace(`App started on port ${PORT}`);
       Sentry.logger.trace(`App started on port ${PORT}`, {
@@ -67,19 +98,3 @@ client
     });
     process.exit(1);
   });
-
-process.on("SIGTERM", async () => {
-  await client.close();
-  log.info("SIGTERM, closing MongoDB connection.");
-  Sentry.logger.info("SIGTERM, closing MongoDB connection.", {
-    module: "Server",
-  });
-});
-
-process.on("SIGINT", async () => {
-  await client.close();
-  log.info("SIGINT, closing MongoDB connection.");
-  Sentry.logger.info("SIGINT, closing MongoDB connection.", {
-    module: "Server",
-  });
-});

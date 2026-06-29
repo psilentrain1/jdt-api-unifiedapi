@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.1.6
+- Added Sentry error tracking
+- Fixed non-graceful shutdown on SIGTERM and SIGINT
+- Fixed deploy workflow
+
 ## 0.1.5
 - Added middleware to prevent requests before DB is ready
 
