@@ -4,10 +4,10 @@
   "description": "Unified API for applications across the JDT ecosystem.",
   "license": "ISC",
   "author": "James Drake",
-  "type": "commonjs",
+  "type": "module",
   "main": "src/server.ts",
   "scripts": {
-    "start": "ts-node src/server.ts",
+    "start": "node --loader ts-node/esm src/server.ts",
     "build": "tsc",
     "serve": "node dist/server.js"
   },

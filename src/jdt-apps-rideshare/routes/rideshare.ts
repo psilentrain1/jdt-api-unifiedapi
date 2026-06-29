@@ -1,8 +1,8 @@
 import express from "express";
 import * as Sentry from "@sentry/node";
-import * as db from "../controllers/rideshare";
+import * as db from "../controllers/rideshare.js";
 import { ObjectId } from "mongodb";
-import { logger } from "../../services/logging";
+import { logger } from "../../services/logging.js";
 
 const log = logger.child({ module: "Rideshare Routes" });
 

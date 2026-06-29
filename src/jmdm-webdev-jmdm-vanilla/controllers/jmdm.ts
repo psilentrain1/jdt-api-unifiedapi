@@ -1,7 +1,7 @@
-import { client } from "../../services/mongo";
-import type { Credit } from "../utils/types";
+import { client } from "../../services/mongo.js";
+import type { Credit } from "../utils/types.js";
 import type { WithId } from "mongodb";
-import { logger } from "../../services/logging";
+import { logger } from "../../services/logging.js";
 
 const log = logger.child({ module: "JMDM Controllers" });
 

@@ -1,15 +1,15 @@
-import "./services/instrument";
+import "./services/instrument.js";
 import express from "express";
 import * as Sentry from "@sentry/node";
 import { toNodeHandler } from "better-auth/node";
-import { auth } from "./services/auth";
+import { auth } from "./services/auth.js";
 import cors from "cors";
 import "dotenv/config";
-import { client } from "./services/mongo";
-import { logger } from "./services/logging";
-import { router as rideshareRoutes } from "./jdt-apps-rideshare/routes/rideshare";
-import { router as jmdmRoutes } from "./jmdm-webdev-jmdm-vanilla/routes/jmdm";
-import { origins } from "./common/globals";
+import { client } from "./services/mongo.js";
+import { logger } from "./services/logging.js";
+import { router as rideshareRoutes } from "./jdt-apps-rideshare/routes/rideshare.js";
+import { router as jmdmRoutes } from "./jmdm-webdev-jmdm-vanilla/routes/jmdm.js";
+import { origins } from "./common/globals.js";
 
 const log = logger.child({ module: "Server" });
 const app = express();
