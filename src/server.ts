@@ -1,12 +1,15 @@
 import "./services/instrument";
 import express from "express";
 import * as Sentry from "@sentry/node";
+import { toNodeHandler } from "better-auth/node";
+import { auth } from "./services/auth";
 import cors from "cors";
 import "dotenv/config";
 import { client } from "./services/mongo";
 import { logger } from "./services/logging";
 import { router as rideshareRoutes } from "./jdt-apps-rideshare/routes/rideshare";
 import { router as jmdmRoutes } from "./jmdm-webdev-jmdm-vanilla/routes/jmdm";
+import { origins } from "./common/globals";
 
 const log = logger.child({ module: "Server" });
 const app = express();
@@ -14,9 +17,13 @@ const PORT = Number(process.env.SERVER_PORT);
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"],
+    origin: origins,
+    credentials: true,
   }),
 );
+
+app.all("/auth/*splat", toNodeHandler(auth));
+
 app.use(express.json({ limit: "10mb" }));
 
 app.use((req, res, next) => {
