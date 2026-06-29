@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.1.7
+- Added authentication and authorization
+
 ## 0.1.6
 - Added Sentry error tracking
 - Fixed non-graceful shutdown on SIGTERM and SIGINT

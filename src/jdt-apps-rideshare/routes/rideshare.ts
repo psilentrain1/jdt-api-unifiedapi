@@ -1,8 +1,10 @@
 import express from "express";
 import * as Sentry from "@sentry/node";
-import * as db from "../controllers/rideshare";
+import * as db from "../controllers/rideshare.js";
+import { auth } from "../../services/auth.js";
 import { ObjectId } from "mongodb";
-import { logger } from "../../services/logging";
+import { logger } from "../../services/logging.js";
+import { toWebHeaders } from "../../common/utils.js";
 
 const log = logger.child({ module: "Rideshare Routes" });
 
@@ -13,6 +15,12 @@ router.get("/", async (req, res) => {
   Sentry.logger.trace("GET /rides", {
     module: "Rideshare Routes",
   });
+  const session = await auth.api.getSession({
+    headers: toWebHeaders(req.headers),
+  });
+  if (!session) {
+    return res.status(401).json({ error: "Unauthorized." });
+  }
   res.send(await db.getAllRides());
 });
 
@@ -21,6 +29,12 @@ router.get("/get/:id", async (req, res) => {
   Sentry.logger.trace("GET /rides/get/:id", {
     module: "Rideshare Routes",
   });
+  const session = await auth.api.getSession({
+    headers: toWebHeaders(req.headers),
+  });
+  if (!session) {
+    return res.status(401).json({ error: "Unauthorized." });
+  }
   res.send(await db.getOneRide(ObjectId.createFromHexString(req.params.id)));
 });
 
@@ -29,6 +43,12 @@ router.post("/add", async (req, res) => {
   Sentry.logger.trace("POST /rides/add", {
     module: "Rideshare Routes",
   });
+  const session = await auth.api.getSession({
+    headers: toWebHeaders(req.headers),
+  });
+  if (!session) {
+    return res.status(401).json({ error: "Unauthorized." });
+  }
   if (await db.addRide(req.body)) {
     res.status(200).json({ message: "Success." });
   } else {
@@ -41,6 +61,12 @@ router.put("/update", async (req, res) => {
   Sentry.logger.trace("PUT /rides/update", {
     module: "Rideshare Routes",
   });
+  const session = await auth.api.getSession({
+    headers: toWebHeaders(req.headers),
+  });
+  if (!session) {
+    return res.status(401).json({ error: "Unauthorized." });
+  }
   if (await db.updateRide(req.body)) {
     res.status(200).json({ message: "Success." });
   } else {
@@ -53,6 +79,12 @@ router.delete("/delete/:id", async (req, res) => {
   Sentry.logger.trace("DELETE /rides/delete/:id", {
     module: "Rideshare Routes",
   });
+  const session = await auth.api.getSession({
+    headers: toWebHeaders(req.headers),
+  });
+  if (!session) {
+    return res.status(401).json({ error: "Unauthorized." });
+  }
   if (await db.deleteRide(ObjectId.createFromHexString(req.params.id))) {
     res.status(200).json({ message: "Success." });
   } else {

@@ -1,8 +1,8 @@
 import * as Sentry from "@sentry/node";
-import { client } from "../../services/mongo";
-import type { Ride } from "../utils/types";
+import { client } from "../../services/mongo.js";
+import type { Ride } from "../utils/types.js";
 import type { ObjectId, WithId } from "mongodb";
-import { logger } from "../../services/logging";
+import { logger } from "../../services/logging.js";
 
 const log = logger.child({ module: "Rideshare Controllers" });
 
