@@ -1,6 +1,6 @@
 import express from "express";
-import * as db from "../controllers/jmdm26";
-import { logger } from "../../services/logging";
+import * as db from "../controllers/jmdm26.js";
+import { logger } from "../../services/logging.js";
 
 const log = logger.child({ module: "JMDM26 Routes" });
 
