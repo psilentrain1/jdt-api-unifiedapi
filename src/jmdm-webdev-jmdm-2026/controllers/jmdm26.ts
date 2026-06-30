@@ -1,6 +1,6 @@
 import express from "express";
-import { client } from "../../services/mongo";
-import { logger } from "../../services/logging";
+import { client } from "../../services/mongo.js";
+import { logger } from "../../services/logging.js";
 import { ObjectId } from "mongodb";
 import type { WithId } from "mongodb";
 import type {
@@ -9,7 +9,7 @@ import type {
   ResumeInfo,
   Experience,
   Post,
-} from "../utils/types";
+} from "../utils/types.js";
 
 const log = logger.child({ module: "JMDM26 Controllers" });
 
