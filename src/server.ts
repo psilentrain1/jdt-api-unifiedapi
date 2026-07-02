@@ -21,7 +21,6 @@ app.use(
     credentials: true,
   }),
 );
-app.use(express.json({ limit: "10mb" }));
 
 app.all("/auth/*splat", toNodeHandler(auth));
 
@@ -97,6 +96,12 @@ client
       Sentry.logger.trace(`App started on port ${PORT}`, {
         module: "Server",
       });
+      Sentry.logger.trace(
+        `Auth: Signups enabled? ${process.env.SIGNUP_ENABLED === "1"}`,
+        {
+          module: "Server",
+        },
+      );
     });
   })
   .catch((err) => {

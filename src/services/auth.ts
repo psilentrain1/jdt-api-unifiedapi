@@ -16,12 +16,28 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  plugins: [bearer()],
   session: {
     cookieCache: {
-      enabled: false,
+      enabled: true,
       signupEnabled: SIGNUP_ENABLED,
     },
   },
   trustedOrigins: origins,
+  user: {
+    additionalFields: {
+      siteAccess: {
+        type: "string[]",
+        default: [],
+        required: true,
+        input: true,
+      },
+    },
+    advanced: {
+      defaultCookieAttributes: {
+        sameSite: "none",
+        secure: true,
+        httpOnly: true,
+      },
+    },
+  },
 });
