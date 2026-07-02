@@ -2,6 +2,7 @@ import * as Sentry from "@sentry/node";
 import { client } from "../../services/mongo.js";
 import type { Ride } from "../utils/types.js";
 import type { ObjectId, WithId } from "mongodb";
+import { getErrorMessage } from "../../common/utils.js";
 import { logger } from "../../services/logging.js";
 
 const log = logger.child({ module: "Rideshare Controllers" });
@@ -36,7 +37,7 @@ export async function getAllRides(): Promise<WithId<Ride>[]> {
  * @returns Ride object
  */
 export function getOneRide(id: ObjectId): Promise<WithId<Ride> | null> {
-  log.trace(`getOneRide() id: ${id}`);
+  log.trace(`getOneRide() id: ${id.toHexString()}`);
   Sentry.logger.info("getOneRide()", {
     module: "Rideshare Controllers",
     id: id,
@@ -72,7 +73,7 @@ export async function addRide(ride: Ride): Promise<boolean> {
 
     return result.acknowledged;
   } catch (error) {
-    log.info(`addRide() error: ${error}`);
+    log.info(`addRide() error: ${getErrorMessage(error)}`);
     Sentry.logger.error("addRide() error", {
       module: "Rideshare Controllers",
       error: error,
@@ -111,7 +112,7 @@ export async function updateRide(ride: Ride): Promise<boolean> {
     const result = await getCollection().updateOne(query, update, options);
     return result.acknowledged;
   } catch (error) {
-    log.info(`updateRide() error: ${error}`);
+    log.info(`updateRide() error: ${getErrorMessage(error)}`);
     Sentry.logger.error("updateRide() error", {
       module: "Rideshare Controllers",
       error: error,
@@ -126,7 +127,7 @@ export async function updateRide(ride: Ride): Promise<boolean> {
  * @returns Success boolean
  */
 export async function deleteRide(id: ObjectId): Promise<boolean> {
-  log.trace(`deleteRide() id: ${id}`);
+  log.trace(`deleteRide() id: ${id.toHexString()}`);
   Sentry.logger.info("deleteRide()", {
     module: "Rideshare Controllers",
     id: id,
@@ -144,7 +145,7 @@ export async function deleteRide(id: ObjectId): Promise<boolean> {
     const result = await getCollection().updateOne(query, update, options);
     return result.acknowledged;
   } catch (error) {
-    log.info(`deleteRide() error: ${error}`);
+    log.info(`deleteRide() error: ${getErrorMessage(error)}`);
     Sentry.logger.error("deleteRide() error", {
       module: "Rideshare Controllers",
       error: error,

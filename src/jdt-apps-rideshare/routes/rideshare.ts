@@ -5,6 +5,7 @@ import { auth } from "../../services/auth.js";
 import { ObjectId } from "mongodb";
 import { logger } from "../../services/logging.js";
 import { toWebHeaders } from "../../common/utils.js";
+import type { Ride } from "../utils/types.js";
 
 const log = logger.child({ module: "Rideshare Routes" });
 
@@ -49,7 +50,7 @@ router.post("/add", async (req, res) => {
   if (!session) {
     return res.status(401).json({ error: "Unauthorized." });
   }
-  if (await db.addRide(req.body)) {
+  if (await db.addRide(req.body as Ride)) {
     res.status(200).json({ message: "Success." });
   } else {
     res.status(400).json({ message: "Error adding ride." });
@@ -67,7 +68,7 @@ router.put("/update", async (req, res) => {
   if (!session) {
     return res.status(401).json({ error: "Unauthorized." });
   }
-  if (await db.updateRide(req.body)) {
+  if (await db.updateRide(req.body as Ride)) {
     res.status(200).json({ message: "Success." });
   } else {
     res.status(400).json({ message: "Error updating ride." });
