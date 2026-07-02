@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "nodenext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "outDir": "./dist",
     "strict": true,
     "strictNullChecks": true,
@@ -14,7 +14,4 @@
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"],
-  "ts-node": {
-    "esm": true,
-  },
 }
