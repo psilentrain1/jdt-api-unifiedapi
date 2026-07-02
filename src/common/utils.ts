@@ -7,3 +7,20 @@ export function toWebHeaders(incoming: IncomingHttpHeaders): Headers {
     ) as [string, string][],
   );
 }
+
+/**
+ * Converts a try/catch error to a string message.
+ * @param error Unknown type error
+ * @returns String message
+ */
+export function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  if (error && typeof error === "object" && "message" in error) {
+    return String(error.message);
+  }
+
+  return String(error);
+}

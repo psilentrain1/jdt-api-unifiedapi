@@ -10,6 +10,7 @@ import { logger } from "./services/logging.js";
 import { router as rideshareRoutes } from "./jdt-apps-rideshare/routes/rideshare.js";
 import { router as jmdmRoutes } from "./jmdm-webdev-jmdm-vanilla/routes/jmdm.js";
 import { origins } from "./common/globals.js";
+import { getErrorMessage } from "./common/utils.js";
 
 const log = logger.child({ module: "Server" });
 const app = express();
@@ -74,7 +75,9 @@ async function serverShutdown(signal: string) {
       module: "Server",
     });
   } catch (err) {
-    log.error(`Error closing MongoDB connection. Error: ${err}`);
+    log.error(
+      `Error closing MongoDB connection. Error: ${getErrorMessage(err)}`,
+    );
     Sentry.logger.error(`Error closing MongoDB connection.`, {
       module: "Server",
       error: err,
@@ -84,8 +87,8 @@ async function serverShutdown(signal: string) {
   process.exit(0);
 }
 
-process.on("SIGTERM", () => serverShutdown("SIGTERM"));
-process.on("SIGINT", () => serverShutdown("SIGINT"));
+process.on("SIGTERM", () => void serverShutdown("SIGTERM"));
+process.on("SIGINT", () => void serverShutdown("SIGINT"));
 
 client
   .connect()
