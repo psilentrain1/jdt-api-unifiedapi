@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.8
+- Improved authentication and authorization flow
+- Bug fixes and performance improvements
+
 ## 0.1.7
 - Added authentication and authorization
 
