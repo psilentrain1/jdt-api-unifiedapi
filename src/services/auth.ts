@@ -1,5 +1,4 @@
 import { betterAuth } from "better-auth";
-import { bearer } from "better-auth/plugins";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { client } from "./mongo.js";
 import { origins } from "../common/globals.js";
@@ -43,18 +42,20 @@ export const auth = betterAuth({
   databaseHooks: {
     user: {
       create: {
-        before: async (user, ctx) => {
+        // TODO: This will need to be async if I plan to look up current siteAccess to append
+        // and the return Promise will need to be removed
+        before: (user, ctx) => {
           const origin =
             ctx?.request?.headers.get("origin") ??
             ctx?.request?.headers.get("referrer") ??
             null;
 
-          return {
+          return Promise.resolve({
             data: {
               ...user,
               siteAccess: origin ? [origin] : [],
             },
-          };
+          });
         },
       },
     },
