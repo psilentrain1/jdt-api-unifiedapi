@@ -4,7 +4,6 @@ import { APIError } from "better-auth/api";
 import { client } from "./mongo.js";
 import { origins } from "../common/globals.js";
 
-// TODO: Verify this is working
 const SIGNUP_ENABLED = process.env.SIGNUP_ENABLED === "1";
 
 const db = client.db("auth");
@@ -26,11 +25,11 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    disableSignUp: !SIGNUP_ENABLED,
   },
   session: {
     cookieCache: {
       enabled: true,
-      signupEnabled: SIGNUP_ENABLED,
     },
   },
   trustedOrigins: origins,
@@ -39,7 +38,6 @@ export const auth = betterAuth({
       siteAccess: {
         type: "string[]",
         default: [],
-        required: true,
         input: false,
       },
     },

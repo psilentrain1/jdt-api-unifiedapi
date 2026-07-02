@@ -99,12 +99,6 @@ client
       Sentry.logger.trace(`App started on port ${PORT}`, {
         module: "Server",
       });
-      Sentry.logger.trace(
-        `Auth: Signups enabled? ${process.env.SIGNUP_ENABLED === "1"}`,
-        {
-          module: "Server",
-        },
-      );
     });
   })
   .catch((err) => {
