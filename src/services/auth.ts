@@ -4,7 +4,7 @@ import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { client } from "./mongo.js";
 import { origins } from "../common/globals.js";
 
-// TODO: Fix this
+// TODO: Verify this is working
 const SIGNUP_ENABLED = process.env.SIGNUP_ENABLED === "1";
 
 const db = client.db("auth");
@@ -29,14 +29,33 @@ export const auth = betterAuth({
         type: "string[]",
         default: [],
         required: true,
-        input: true,
+        input: false,
       },
     },
-    advanced: {
-      defaultCookieAttributes: {
-        sameSite: "none",
-        secure: true,
-        httpOnly: true,
+  },
+  advanced: {
+    defaultCookieAttributes: {
+      sameSite: "none",
+      secure: true,
+      httpOnly: true,
+    },
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user, ctx) => {
+          const origin =
+            ctx?.request?.headers.get("origin") ??
+            ctx?.request?.headers.get("referrer") ??
+            null;
+
+          return {
+            data: {
+              ...user,
+              siteAccess: origin ? [origin] : [],
+            },
+          };
+        },
       },
     },
   },
