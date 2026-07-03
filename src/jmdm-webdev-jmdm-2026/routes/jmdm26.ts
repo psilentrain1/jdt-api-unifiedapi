@@ -1,6 +1,9 @@
 import express from "express";
+import * as Sentry from "@sentry/node";
 import * as db from "../controllers/jmdm26.js";
+import { auth } from "../../services/auth.js";
 import { logger } from "../../services/logging.js";
+import { toWebHeaders } from "../../common/utils.js";
 
 const log = logger.child({ module: "JMDM26 Routes" });
 
@@ -20,24 +23,57 @@ function createCrudRoutes(
 ): express.Router {
   const r = express.Router();
 
-  r.get("/", (req, res, next) => {
+  r.get("/", async (req, res, next) => {
     log.trace(`GET /${resource}`);
+    Sentry.logger.trace(`GET /${resource}`, {
+      module: "JMDM26 Routes",
+    });
     handlers.getAll(req, res, next);
   });
-  r.post("/", (req, res, next) => {
+  r.post("/", async (req, res, next) => {
     log.trace(`POST /${resource}`);
+    Sentry.logger.trace(`POST /${resource}`, {
+      module: "JMDM26 Routes",
+    });
+    const session = await auth.api.getSession({
+      headers: toWebHeaders(req.headers),
+    });
+    if (!session) {
+      return res.status(401).json({ error: "Unauthorized." });
+    }
     handlers.add(req, res, next);
   });
-  r.get("/:id", (req, res, next) => {
+  r.get("/:id", async (req, res, next) => {
     log.trace(`GET /${resource}/:id`);
+    Sentry.logger.trace(`GET /${resource}/:id`, {
+      module: "JMDM26 Routes",
+    });
     handlers.getOne(req, res, next);
   });
-  r.put("/:id", (req, res, next) => {
+  r.put("/:id", async (req, res, next) => {
     log.trace(`PUT /${resource}/:id`);
+    Sentry.logger.trace(`PUT /${resource}/:id`, {
+      module: "JMDM26 Routes",
+    });
+    const session = await auth.api.getSession({
+      headers: toWebHeaders(req.headers),
+    });
+    if (!session) {
+      return res.status(401).json({ error: "Unauthorized." });
+    }
     handlers.update(req, res, next);
   });
-  r.delete("/:id", (req, res, next) => {
+  r.delete("/:id", async (req, res, next) => {
     log.trace(`DELETE /${resource}/:id`);
+    Sentry.logger.trace(`DELETE /${resource}/:id`, {
+      module: "JMDM26 Routes",
+    });
+    const session = await auth.api.getSession({
+      headers: toWebHeaders(req.headers),
+    });
+    if (!session) {
+      return res.status(401).json({ error: "Unauthorized." });
+    }
     handlers.delete(req, res, next);
   });
 
@@ -46,16 +82,31 @@ function createCrudRoutes(
 
 router.get("/", (req, res) => {
   log.trace("GET /");
+  Sentry.logger.trace(`GET /`, {
+    module: "JMDM26 Routes",
+  });
   res.status(400).send("Bad Request");
 });
 
 router.get("/site", async (req, res) => {
   log.trace("GET /site");
+  Sentry.logger.trace(`GET /site`, {
+    module: "JMDM26 Routes",
+  });
   res.send(await db.getSiteSettings());
 });
 
 router.put("/site", async (req, res) => {
   log.trace("PUT /site");
+  Sentry.logger.trace(`PUT /site`, {
+    module: "JMDM26 Routes",
+  });
+  const session = await auth.api.getSession({
+    headers: toWebHeaders(req.headers),
+  });
+  if (!session) {
+    return res.status(401).json({ error: "Unauthorized." });
+  }
   if (await db.updateSiteSettings(req.body)) {
     res.status(200).json({ message: "Settings updated successfully." });
   } else {
@@ -65,11 +116,23 @@ router.put("/site", async (req, res) => {
 
 router.get("/resume", async (req, res) => {
   log.trace("GET /resume");
+  Sentry.logger.trace(`GET /resume`, {
+    module: "JMDM26 Routes",
+  });
   res.send(await db.getResumeInfo());
 });
 
 router.put("/resume", async (req, res) => {
   log.trace("PUT /resume");
+  Sentry.logger.trace(`PUT /resume`, {
+    module: "JMDM26 Routes",
+  });
+  const session = await auth.api.getSession({
+    headers: toWebHeaders(req.headers),
+  });
+  if (!session) {
+    return res.status(401).json({ error: "Unauthorized." });
+  }
   if (await db.updateResumeInfo(req.body)) {
     res.status(200).json({ message: "Resume info updated successfully." });
   } else {
