@@ -1,4 +1,5 @@
 import express from "express";
+import * as Sentry from "@sentry/node";
 import { client } from "../../services/mongo.js";
 import { logger } from "../../services/logging.js";
 import { ObjectId } from "mongodb";
@@ -43,6 +44,9 @@ function getPostCollection() {
  */
 export async function getSiteSettings(): Promise<WithId<SiteSetting>[]> {
   log.trace("getSiteSettings()");
+  Sentry.logger.trace("getSiteSettings()", {
+    module: "JMDM26 Controllers",
+  });
   const findResult = getSiteCollection().find({ deleted_at: null });
 
   const results = [];
@@ -65,6 +69,9 @@ export async function updateSiteSettings(
  */
 export async function getResumeInfo(): Promise<WithId<ResumeInfo>[]> {
   log.trace("getResumeInfo()");
+  Sentry.logger.trace("getResumeInfo()", {
+    module: "JMDM26 Controllers",
+  });
   const findResult = getResumeCollection().find({ deleted_at: null });
 
   const results = [];
@@ -87,6 +94,9 @@ export async function updateResumeInfo(
  */
 export async function getAllCredits(): Promise<WithId<Credit>[]> {
   log.trace("getAllCredits()");
+  Sentry.logger.trace("getAllCredits()", {
+    module: "JMDM26 Controllers",
+  });
   const findResult = getCreditCollection().find({ deleted_at: null });
 
   const results = [];
@@ -108,6 +118,10 @@ export async function addCredit(
 ): Promise<void> {
   const credit = req.body as Credit;
   log.trace(`addCredit() title: ${credit.title}`);
+  Sentry.logger.trace("addCredit()", {
+    module: "JMDM26 Controllers",
+    title: credit.title,
+  });
   const now = new Date().toISOString();
 
   try {
@@ -146,6 +160,10 @@ export async function getCredit(
 ): Promise<void> {
   const { id } = req.params as { id: string };
   log.trace(`getCredit() id: ${id}`);
+  Sentry.logger.trace("getCredit()", {
+    module: "JMDM26 Controllers",
+    id: id,
+  });
 
   try {
     const _id = ObjectId.createFromHexString(id);
@@ -177,6 +195,10 @@ export async function updateCredit(
 ): Promise<void> {
   const credit = req.body as Credit;
   log.trace(`updateCredit() id: ${req.params.id}`);
+  Sentry.logger.trace("updateCredit()", {
+    module: "JMDM26 Controllers",
+    id: req.params.id,
+  });
   const now = new Date().toISOString();
   const query = { _id: credit.id };
   const update = {
@@ -223,6 +245,10 @@ export async function deleteCredit(
 ): Promise<void> {
   const { id } = req.params as { id: string };
   log.trace(`deleteCredit() id: ${id}`);
+  Sentry.logger.trace("deletedCredit()", {
+    module: "JMDM26 Controllers",
+    id: id,
+  });
   const now = new Date().toISOString();
   const update = {
     $set: {
@@ -255,6 +281,9 @@ export async function deleteCredit(
  */
 export async function getAllExp(): Promise<WithId<Experience>[]> {
   log.trace("getAllExp()");
+  Sentry.logger.trace("getAllExp()", {
+    module: "JMDM26 Controllers",
+  });
   const findResult = getExpCollection().find({ deleted_at: null });
 
   const results = [];
@@ -276,6 +305,10 @@ export async function addExp(
 ): Promise<void> {
   const exp = req.body as Experience;
   log.trace(`addExp() company: ${exp.company}`);
+  Sentry.logger.trace("addExp()", {
+    module: "JMDM26 Controllers",
+    company: exp.company,
+  });
   const now = new Date().toISOString();
 
   try {
@@ -313,6 +346,10 @@ export async function getExp(
 ): Promise<void> {
   const { id } = req.params as { id: string };
   log.trace(`getExp() id: ${id}`);
+  Sentry.logger.trace("getExp()", {
+    module: "JMDM26 Controllers",
+    id: id,
+  });
 
   try {
     const _id = ObjectId.createFromHexString(id);
@@ -344,6 +381,10 @@ export async function updateExp(
 ): Promise<void> {
   const exp = req.body as Experience;
   log.trace(`updateExp() id: ${exp.id}`);
+  Sentry.logger.trace("updateExp()", {
+    module: "JMDM26 Controlers",
+    id: exp.id,
+  });
   const now = new Date().toISOString();
   const query = { _id: exp.id };
   const update = {
@@ -385,6 +426,10 @@ export async function deleteExp(
 ): Promise<void> {
   const { id } = req.params as { id: string };
   log.trace(`deleteExp() id: ${id}`);
+  Sentry.logger.trace("deleteExp()", {
+    module: "JMDM26 Controllers",
+    id: id,
+  });
   const now = new Date().toISOString();
   const update = {
     $set: {
@@ -417,6 +462,9 @@ export async function deleteExp(
  */
 export async function getAllPosts(): Promise<WithId<Post>[]> {
   log.trace("getAllPosts()");
+  Sentry.logger.trace("getAllPosts()", {
+    module: "JMDM26 Controllers",
+  });
   const findResult = getPostCollection().find({ deleted_at: null });
 
   const results = [];
@@ -438,6 +486,10 @@ export async function addPost(
 ): Promise<void> {
   const post = req.body as Post;
   log.trace(`addPost() title: ${post.title}`);
+  Sentry.logger.trace("addPost()", {
+    module: "JMDM26 Controllers",
+    title: post.title,
+  });
   const now = new Date().toISOString();
 
   try {
@@ -472,6 +524,10 @@ export async function getPost(
 ): Promise<void> {
   const { id } = req.params as { id: string };
   log.trace(`getPost() id: ${id}`);
+  Sentry.logger.trace("getPost()", {
+    module: "JMDM26 Controllers",
+    id: id,
+  });
 
   try {
     const _id = ObjectId.createFromHexString(id);
@@ -503,6 +559,10 @@ export async function updatePost(
 ): Promise<void> {
   const post = req.body as Post;
   log.trace(`updatePost() id: ${post.id}`);
+  Sentry.logger.trace("updatePost()", {
+    module: "JMDM26 Controllers",
+    id: post.id,
+  });
   const now = new Date().toISOString();
   const query = { _id: post.id };
   const update = {
@@ -541,6 +601,10 @@ export async function deletePost(
 ): Promise<void> {
   const { id } = req.params as { id: string };
   log.trace(`deletePost() id: ${id}`);
+  Sentry.logger.trace("deletePost()", {
+    module: "JMDM26 Controllers",
+    id: id,
+  });
   const now = new Date().toISOString();
   const update = {
     $set: {
