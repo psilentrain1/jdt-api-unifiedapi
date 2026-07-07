@@ -8,6 +8,7 @@ const log = logger.child({ module: "authMiddleware" });
 
 // Extend Express Request interface to include session context
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       user?: typeof auth.$Infer.Session.user;
@@ -44,7 +45,7 @@ export const requireSession = async (
 
     next();
   } catch (error) {
-    log.error(`Session verification error: ${error}`);
+    log.error(`Session verification error: ${error as string}`);
     Sentry.logger.error(`Session verification error.`, {
       module: "authMiddleware",
       error: error,

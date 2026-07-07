@@ -11,6 +11,7 @@ import type {
   Experience,
   Post,
 } from "../utils/types.js";
+import { getErrorMessage } from "../../common/utils.js";
 
 const log = logger.child({ module: "JMDM26 Controllers" });
 
@@ -56,11 +57,41 @@ export async function getSiteSettings(): Promise<WithId<SiteSetting>[]> {
   return results;
 }
 
-// TODO
+/**
+ * Updates one site setting
+ * @param settings SiteSetting object
+ * @returns Success boolean
+ */
 export async function updateSiteSettings(
   settings: SiteSetting,
 ): Promise<boolean> {
-  return false;
+  log.trace(`updateSiteSettings() setting: ${settings.setting}`);
+  Sentry.logger.trace("updateSiteSettings()", {
+    module: "JMDM26 Controllers",
+    ...settings,
+  });
+  const now = new Date().toISOString();
+  const query = { _id: settings.id };
+  const update = {
+    $set: {
+      setting: settings.setting,
+      value: settings.value,
+      modified_at: now,
+    },
+  };
+  const options = {};
+
+  try {
+    const result = await getSiteCollection().updateOne(query, update, options);
+    return result.acknowledged;
+  } catch (error) {
+    log.info(`updateSiteSettings() error: ${getErrorMessage(error)}`);
+    Sentry.logger.error("updateSiteSettings() error", {
+      module: "JMDM26 Controllers",
+      error: error,
+    });
+    return false;
+  }
 }
 
 /**
@@ -81,11 +112,46 @@ export async function getResumeInfo(): Promise<WithId<ResumeInfo>[]> {
   return results;
 }
 
-// TODO
+/**
+ * Updates resume information.
+ * @param resumeInfo ResumeInfo object
+ * @returns Success boolean
+ */
 export async function updateResumeInfo(
   resumeInfo: ResumeInfo,
 ): Promise<boolean> {
-  return false;
+  log.trace(`updateResumeInfo()`);
+  Sentry.logger.info("updateResumeInfo()", {
+    module: "JMDM26 Controllers",
+    ...resumeInfo,
+  });
+  const now = new Date().toISOString();
+  const query = { _id: resumeInfo.id };
+  const update = {
+    $set: {
+      name: resumeInfo.name,
+      email: resumeInfo.email,
+      phone: resumeInfo.phone,
+      modified_at: now,
+    },
+  };
+  const options = {};
+
+  try {
+    const result = await getResumeCollection().updateOne(
+      query,
+      update,
+      options,
+    );
+    return result.acknowledged;
+  } catch (error) {
+    log.info(`updateRide() error: ${getErrorMessage(error)}`);
+    Sentry.logger.error("updateResumeInfo() error", {
+      module: "JMDM26 Controllers",
+      error: error,
+    });
+    return false;
+  }
 }
 
 /**
@@ -194,7 +260,7 @@ export async function updateCredit(
   res: express.Response,
 ): Promise<void> {
   const credit = req.body as Credit;
-  log.trace(`updateCredit() id: ${req.params.id}`);
+  log.trace(`updateCredit() id: ${req.params.id as string}`);
   Sentry.logger.trace("updateCredit()", {
     module: "JMDM26 Controllers",
     id: req.params.id,
@@ -380,7 +446,7 @@ export async function updateExp(
   res: express.Response,
 ): Promise<void> {
   const exp = req.body as Experience;
-  log.trace(`updateExp() id: ${exp.id}`);
+  log.trace(`updateExp() id: ${exp.id?.toHexString()}`);
   Sentry.logger.trace("updateExp()", {
     module: "JMDM26 Controlers",
     id: exp.id,
@@ -558,7 +624,7 @@ export async function updatePost(
   res: express.Response,
 ): Promise<void> {
   const post = req.body as Post;
-  log.trace(`updatePost() id: ${post.id}`);
+  log.trace(`updatePost() id: ${post.id?.toHexString()}`);
   Sentry.logger.trace("updatePost()", {
     module: "JMDM26 Controllers",
     id: post.id,

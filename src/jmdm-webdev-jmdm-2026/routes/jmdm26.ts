@@ -3,6 +3,7 @@ import * as Sentry from "@sentry/node";
 import * as db from "../controllers/jmdm26.js";
 import { requireSession } from "../../middleware/authMiddleware.js";
 import { logger } from "../../services/logging.js";
+import { ResumeInfo, SiteSetting } from "../utils/types.js";
 
 const log = logger.child({ module: "JMDM26 Routes" });
 
@@ -27,35 +28,35 @@ function createCrudRoutes(
     Sentry.logger.trace(`GET /${resource}`, {
       module: "JMDM26 Routes",
     });
-    handlers.getAll(req, res, next);
+    await handlers.getAll(req, res, next);
   });
   r.post("/", requireSession, async (req, res, next) => {
     log.trace(`POST /${resource}`);
     Sentry.logger.trace(`POST /${resource}`, {
       module: "JMDM26 Routes",
     });
-    handlers.add(req, res, next);
+    await handlers.add(req, res, next);
   });
   r.get("/:id", async (req, res, next) => {
     log.trace(`GET /${resource}/:id`);
     Sentry.logger.trace(`GET /${resource}/:id`, {
       module: "JMDM26 Routes",
     });
-    handlers.getOne(req, res, next);
+    await handlers.getOne(req, res, next);
   });
   r.put("/:id", requireSession, async (req, res, next) => {
     log.trace(`PUT /${resource}/:id`);
     Sentry.logger.trace(`PUT /${resource}/:id`, {
       module: "JMDM26 Routes",
     });
-    handlers.update(req, res, next);
+    await handlers.update(req, res, next);
   });
   r.delete("/:id", requireSession, async (req, res, next) => {
     log.trace(`DELETE /${resource}/:id`);
     Sentry.logger.trace(`DELETE /${resource}/:id`, {
       module: "JMDM26 Routes",
     });
-    handlers.delete(req, res, next);
+    await handlers.delete(req, res, next);
   });
 
   return r;
@@ -82,7 +83,7 @@ router.put("/site", requireSession, async (req, res) => {
   Sentry.logger.trace(`PUT /site`, {
     module: "JMDM26 Routes",
   });
-  if (await db.updateSiteSettings(req.body)) {
+  if (await db.updateSiteSettings(req.body as SiteSetting)) {
     res.status(200).json({ message: "Settings updated successfully." });
   } else {
     res.status(400).json({ message: "Error updating settings." });
@@ -102,7 +103,7 @@ router.put("/resume", requireSession, async (req, res) => {
   Sentry.logger.trace(`PUT /resume`, {
     module: "JMDM26 Routes",
   });
-  if (await db.updateResumeInfo(req.body)) {
+  if (await db.updateResumeInfo(req.body as ResumeInfo)) {
     res.status(200).json({ message: "Resume info updated successfully." });
   } else {
     res.status(400).json({ message: "Error updating resume info." });
