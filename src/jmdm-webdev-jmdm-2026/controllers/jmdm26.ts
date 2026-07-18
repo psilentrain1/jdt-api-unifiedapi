@@ -156,9 +156,13 @@ export async function updateResumeInfo(
 
 /**
  * Gets a list of all credits.
- * @returns Array of credit objects.
+ * @param req Express Request object.
+ * @param res Express Response object.
  */
-export async function getAllCredits(): Promise<WithId<Credit>[]> {
+export async function getAllCredits(
+  req: express.Request,
+  res: express.Response,
+): Promise<void> {
   log.trace("getAllCredits()");
   Sentry.logger.trace("getAllCredits()", {
     module: "JMDM26 Controllers",
@@ -169,7 +173,7 @@ export async function getAllCredits(): Promise<WithId<Credit>[]> {
   for await (const doc of findResult) {
     results.push(doc);
   }
-  return results;
+  res.status(200).json(results);
 }
 
 /**
@@ -343,9 +347,13 @@ export async function deleteCredit(
 
 /**
  * Gets a list of all experiences.
- * @returns Array of Experience objects.
+ * @param req Express Request object.
+ * @param res Express Response object.
  */
-export async function getAllExp(): Promise<WithId<Experience>[]> {
+export async function getAllExp(
+  req: express.Request,
+  res: express.Response,
+): Promise<void> {
   log.trace("getAllExp()");
   Sentry.logger.trace("getAllExp()", {
     module: "JMDM26 Controllers",
@@ -356,7 +364,7 @@ export async function getAllExp(): Promise<WithId<Experience>[]> {
   for await (const doc of findResult) {
     results.push(doc);
   }
-  return results;
+  res.status(200).json(results);
 }
 
 /**
@@ -524,9 +532,13 @@ export async function deleteExp(
 
 /**
  * Gets a list of all posts.
- * @returns Array of Post objects.
+ * @param req Express Request object.
+ * @param res Express Response object.
  */
-export async function getAllPosts(): Promise<WithId<Post>[]> {
+export async function getAllPosts(
+  req: express.Request,
+  res: express.Response,
+): Promise<void> {
   log.trace("getAllPosts()");
   Sentry.logger.trace("getAllPosts()", {
     module: "JMDM26 Controllers",
@@ -537,7 +549,7 @@ export async function getAllPosts(): Promise<WithId<Post>[]> {
   for await (const doc of findResult) {
     results.push(doc);
   }
-  return results;
+  res.status(200).json(results);
 }
 
 /**
