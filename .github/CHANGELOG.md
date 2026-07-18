@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.1.9
+- Added JMDM26 routes and controllers
+- Added authMiddleware
+
+## 0.1.8
+- Improved authentication and authorization flow
+- Bug fixes and performance improvements
+
 ## 0.1.7
 - Added authentication and authorization
 
