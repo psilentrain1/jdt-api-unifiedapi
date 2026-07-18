@@ -3,7 +3,7 @@ import * as Sentry from "@sentry/node";
 import * as db from "../controllers/jmdm26.js";
 import { requireSession } from "../../middleware/authMiddleware.js";
 import { logger } from "../../services/logging.js";
-import { ResumeInfo, SiteSetting } from "../utils/types.js";
+import type { ResumeInfo, SiteSetting } from "../utils/types.js";
 
 const log = logger.child({ module: "JMDM26 Routes" });
 
