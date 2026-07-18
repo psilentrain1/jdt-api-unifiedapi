@@ -28,6 +28,10 @@ app.all("/auth/*splat", toNodeHandler(auth));
 
 app.use(express.json({ limit: "10mb" }));
 
+app.all("/auth/*splat", toNodeHandler(auth));
+
+app.use(express.json({ limit: "10mb" }));
+
 app.use((req, res, next) => {
   if (!dbReady) {
     console.warn(`Request arrived before DB ready: ${req.method} ${req.path}`);
