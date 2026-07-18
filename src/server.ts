@@ -9,6 +9,7 @@ import { client } from "./services/mongo.js";
 import { logger } from "./services/logging.js";
 import { router as rideshareRoutes } from "./jdt-apps-rideshare/routes/rideshare.js";
 import { router as jmdmRoutes } from "./jmdm-webdev-jmdm-vanilla/routes/jmdm.js";
+import { router as jmdm26Routes } from "./jmdm-webdev-jmdm-2026/routes/jmdm26.js";
 import { origins } from "./common/globals.js";
 import { getErrorMessage } from "./common/utils.js";
 
@@ -50,7 +51,9 @@ app.get("/", (req, res) => {
 
 app.use("/rides", rideshareRoutes);
 
-app.use("/jmdm", jmdmRoutes);
+app.use("/jmdm-v1", jmdmRoutes);
+
+app.use("/jmdm", jmdm26Routes);
 
 Sentry.setupExpressErrorHandler(app);
 
