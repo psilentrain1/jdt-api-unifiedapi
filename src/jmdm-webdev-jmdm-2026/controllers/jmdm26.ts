@@ -71,7 +71,7 @@ export async function updateSiteSettings(
     ...settings,
   });
   const now = new Date().toISOString();
-  const query = { _id: settings.id };
+  const query = { _id: settings._id };
   const update = {
     $set: {
       setting: settings.setting,
@@ -126,7 +126,7 @@ export async function updateResumeInfo(
     ...resumeInfo,
   });
   const now = new Date().toISOString();
-  const query = { _id: resumeInfo.id };
+  const query = { _id: resumeInfo._id };
   const update = {
     $set: {
       name: resumeInfo.name,
@@ -270,7 +270,14 @@ export async function updateCredit(
     id: req.params.id,
   });
   const now = new Date().toISOString();
-  const query = { _id: credit.id };
+  let objectId: ObjectId;
+  try {
+    objectId = new ObjectId(req.params.id as string);
+  } catch {
+    res.status(400).json({ error: "Invalid ID" });
+    return;
+  }
+  const query = { _id: objectId };
   const update = {
     $set: {
       category: credit.category,
@@ -284,21 +291,21 @@ export async function updateCredit(
       modified_at: now,
     },
   };
-  const options = {};
 
   try {
-    const result = await getCreditCollection().updateOne(
-      query,
-      update,
-      options,
-    );
-    if (!result.acknowledged) {
-      res.status(500).json({ error: "Failed to update credit." });
+    const result = await getCreditCollection().updateOne(query, update, {});
+    if (!result.acknowledged || result.matchedCount === 0) {
+      res.status(404).json({ error: "Credit not found." });
       return;
     }
 
     res.status(200).json({ message: "Credit updated successfully." });
-  } catch {
+  } catch (err) {
+    log.error(`updateCredit() failed: ${getErrorMessage(err)}`);
+    Sentry.logger.error("updateCredit() error", {
+      module: "JMDM26 Controllers",
+      error: getErrorMessage(err),
+    });
     res.status(500).json({ error: "Failed to update credit." });
   }
 }
@@ -454,13 +461,20 @@ export async function updateExp(
   res: express.Response,
 ): Promise<void> {
   const exp = req.body as Experience;
-  log.trace(`updateExp() id: ${exp.id?.toHexString()}`);
+  log.trace(`updateExp() id: ${req.params.id as string}`);
   Sentry.logger.trace("updateExp()", {
-    module: "JMDM26 Controlers",
-    id: exp.id,
+    module: "JMDM26 Controllers",
+    id: req.params.id,
   });
   const now = new Date().toISOString();
-  const query = { _id: exp.id };
+  let objectId: ObjectId;
+  try {
+    objectId = new ObjectId(req.params.id as string);
+  } catch {
+    res.status(400).json({ error: "Invalid ID" });
+    return;
+  }
+  const query = { _id: objectId };
   const update = {
     $set: {
       type: exp.type,
@@ -473,17 +487,21 @@ export async function updateExp(
       modified_at: now,
     },
   };
-  const options = {};
 
   try {
-    const result = await getExpCollection().updateOne(query, update, options);
-    if (!result.acknowledged) {
-      res.status(500).json({ error: "Failed to update experience." });
+    const result = await getExpCollection().updateOne(query, update, {});
+    if (!result.acknowledged || result.matchedCount === 0) {
+      res.status(404).json({ error: "Experience not found." });
       return;
     }
 
     res.status(200).json({ message: "Experience updated successfully." });
-  } catch {
+  } catch (err) {
+    log.error(`updateExp() failed: ${getErrorMessage(err)}`);
+    Sentry.logger.error("updateExp() error", {
+      module: "JMDM26 Controllers",
+      error: getErrorMessage(err),
+    });
     res.status(500).json({ error: "Failed to update experience." });
   }
 }
@@ -576,6 +594,7 @@ export async function addPost(
       status: post.status,
       content: post.content,
       author: post.author,
+      slug: post.slug,
       modified_at: now,
     });
 
@@ -636,13 +655,20 @@ export async function updatePost(
   res: express.Response,
 ): Promise<void> {
   const post = req.body as Post;
-  log.trace(`updatePost() id: ${post.id?.toHexString()}`);
+  log.trace(`updatePost() id: ${req.params.id as string}`);
   Sentry.logger.trace("updatePost()", {
     module: "JMDM26 Controllers",
-    id: post.id,
+    id: req.params.id,
   });
   const now = new Date().toISOString();
-  const query = { _id: post.id };
+  let objectId: ObjectId;
+  try {
+    objectId = new ObjectId(req.params.id as string);
+  } catch {
+    res.status(400).json({ error: "Invalid ID" });
+    return;
+  }
+  const query = { _id: objectId };
   const update = {
     $set: {
       title: post.title,
@@ -652,17 +678,21 @@ export async function updatePost(
       modified_at: now,
     },
   };
-  const options = {};
 
   try {
-    const result = await getPostCollection().updateOne(query, update, options);
-    if (!result.acknowledged) {
-      res.status(500).json({ error: "Failed to update post." });
+    const result = await getPostCollection().updateOne(query, update, {});
+    if (!result.acknowledged || result.matchedCount === 0) {
+      res.status(404).json({ error: "Post not found." });
       return;
     }
 
     res.status(200).json({ message: "Post updated successfully." });
-  } catch {
+  } catch (err) {
+    log.error(`updatePost() failed: ${getErrorMessage(err)}`);
+    Sentry.logger.error("updatePost() error", {
+      module: "JMDM26 Controllers",
+      error: getErrorMessage(err),
+    });
     res.status(500).json({ error: "Failed to update post." });
   }
 }

@@ -1,7 +1,7 @@
 import type { ObjectId } from "mongodb";
 
 export interface SiteSetting {
-  id?: ObjectId;
+  _id?: ObjectId;
   setting: string;
   value?: string | null;
   modified_at?: string;
@@ -9,7 +9,7 @@ export interface SiteSetting {
 }
 
 export interface Credit {
-  id?: ObjectId;
+  _id?: ObjectId;
   category: "production" | "music" | "other";
   position: string;
   title: string;
@@ -23,7 +23,7 @@ export interface Credit {
 }
 
 export interface ResumeInfo {
-  id?: ObjectId;
+  _id?: ObjectId;
   name: string;
   email: string;
   phone: number;
@@ -32,7 +32,7 @@ export interface ResumeInfo {
 }
 
 export interface Experience {
-  id?: ObjectId;
+  _id?: ObjectId;
   type: "education" | "work" | "certification";
   name: string;
   company: string;
@@ -45,11 +45,12 @@ export interface Experience {
 }
 
 export interface Post {
-  id?: ObjectId;
+  _id?: ObjectId;
   title: string;
   status: "draft" | "published" | "archived";
   content: string;
   author: ObjectId;
+  slug: string;
   modified_at?: string;
   deleted_at?: string | null;
 }
