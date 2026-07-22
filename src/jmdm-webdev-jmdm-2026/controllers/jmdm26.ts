@@ -341,7 +341,7 @@ export async function deleteCredit(
       options,
     );
 
-    if (!result.acknowledged) {
+    if (!result.acknowledged || result.matchedCount === 0) {
       res.status(500).json({ error: "Failed to delete credit." });
       return;
     }
@@ -537,7 +537,7 @@ export async function deleteExp(
       options,
     );
 
-    if (!result.acknowledged) {
+    if (!result.acknowledged || result.matchedCount === 0) {
       res.status(500).json({ error: "Failed to delete experience." });
       return;
     }
@@ -728,7 +728,7 @@ export async function deletePost(
       options,
     );
 
-    if (!result.acknowledged) {
+    if (!result.acknowledged || result.matchedCount === 0) {
       res.status(500).json({ error: "Failed to delete post." });
       return;
     }
