@@ -1,4 +1,7 @@
 # CHANGELOG
+## 0.1.11
+- (gigs) Added Gigs routes and controllers
+
 ## 0.1.10
 - (jmdm-2026) Bug fixes
 
