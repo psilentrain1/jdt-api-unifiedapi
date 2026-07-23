@@ -70,6 +70,8 @@ function getTemplateCollection() {
   return client.db("jdt_apps_gigs").collection<Template>("template");
 }
 
+// TODO: Audit these functions.
+// Some will need to be deleted and some will need to be added.
 export function getAllProfiles() {}
 
 export function getProfile() {}
