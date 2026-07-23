@@ -36,7 +36,7 @@ export interface Gig {
   business_id?: ObjectId;
   title: string;
   type: string;
-  status?: "draft" | "pending" | "booked" | "completed" | "canceled";
+  status?: "quote" | "draft" | "pending" | "booked" | "completed" | "canceled";
   start_date?: string;
   end_date?: string;
   description?: string;
