@@ -1,21 +1,23 @@
+import type { ObjectId } from "mongodb";
+
 export interface Profile {
-  id?: string;
-  user_id?: string;
+  _id?: ObjectId;
+  user_id?: ObjectId;
   name?: string;
   modified_at?: string;
   deleted_at?: string;
 }
 
 export interface UserSettings {
-  id?: string;
-  user_id?: string;
+  _id?: ObjectId;
+  user_id?: ObjectId;
   modified_at?: string;
   deleted_at?: string;
 }
 
 export interface Business {
-  id?: string;
-  user_id?: string;
+  _id?: ObjectId;
+  user_id?: ObjectId;
   name?: string;
   address1?: string;
   address2?: string;
@@ -23,15 +25,15 @@ export interface Business {
   state?: string;
   zip5?: number;
   zip4?: number;
-  phone?: number;
+  phone?: string;
   modified_at?: string;
   deleted_at?: string;
 }
 
 export interface Gig {
-  id?: string;
-  user_id: string;
-  business_id?: string;
+  _id?: ObjectId;
+  user_id: ObjectId;
+  business_id?: ObjectId;
   title: string;
   type: string;
   status?: "draft" | "pending" | "booked" | "completed" | "canceled";
@@ -43,39 +45,39 @@ export interface Gig {
 }
 
 export interface Note {
-  id?: string;
-  user_id?: string;
-  contact_id?: string;
+  _id?: ObjectId;
+  user_id?: ObjectId;
+  contact_id?: ObjectId;
+  gig_id?: ObjectId;
   content?: string;
   modified_at?: string;
   deleted_at?: string;
 }
 
-export interface Invoice {
-  id?: string;
-  user_id?: string;
-  title?: string;
-  contact_id?: string;
-  status: "draft" | "sent" | "paid" | "overdue" | "void";
-  modified_at?: string;
-  deleted_at?: string;
-}
-
 export interface InvoiceItem {
-  id?: string;
-  invoice_id?: string;
+  _id?: ObjectId;
   description?: string;
   quantity?: number;
   price?: number;
-  total?: number;
+}
+
+export interface Invoice {
+  _id?: ObjectId;
+  user_id?: ObjectId;
+  title?: string;
+  contact_id?: ObjectId;
+  gig_id?: ObjectId;
+  status: "draft" | "sent" | "paid" | "overdue" | "void";
+  items?: InvoiceItem[];
   modified_at?: string;
   deleted_at?: string;
 }
 
 export interface Transaction {
-  id?: string;
-  user_id?: string;
-  contact_id?: string;
+  _id?: ObjectId;
+  user_id?: ObjectId;
+  contact_id?: ObjectId;
+  gig_id?: ObjectId;
   title?: string;
   description?: string;
   category?: string;
@@ -86,8 +88,8 @@ export interface Transaction {
 }
 
 export interface Contact {
-  id?: string;
-  user_id?: string;
+  _id?: ObjectId;
+  user_id?: ObjectId;
   name?: string;
   email?: string;
   phone?: string;
@@ -97,10 +99,10 @@ export interface Contact {
 }
 
 export interface Event {
-  id?: string;
-  user_id?: string;
-  gig_id?: string;
-  contact_id?: string;
+  _id?: ObjectId;
+  user_id?: ObjectId;
+  gig_id?: ObjectId;
+  contact_id?: ObjectId;
   title?: string;
   start_time?: string;
   end_time?: string;
@@ -110,10 +112,11 @@ export interface Event {
 }
 
 export interface Reminder {
-  id?: string;
-  user_id?: string;
-  event_id?: string;
-  contact_id?: string;
+  _id?: ObjectId;
+  user_id?: ObjectId;
+  event_id?: ObjectId;
+  contact_id?: ObjectId;
+  gig_id?: ObjectId;
   content?: string;
   reminder_time?: string;
   modified_at?: string;
@@ -121,9 +124,10 @@ export interface Reminder {
 }
 
 export interface Document {
-  id?: string;
-  user_id?: string;
-  contact_id?: string;
+  _id?: ObjectId;
+  user_id?: ObjectId;
+  contact_id?: ObjectId;
+  gig_id?: ObjectId;
   type?: string;
   title?: string;
   uri?: string;
@@ -132,8 +136,8 @@ export interface Document {
 }
 
 export interface Template {
-  id?: string;
-  user_id?: string;
+  _id?: ObjectId;
+  user_id?: ObjectId;
   type?: string;
   title?: string;
   content?: string;
