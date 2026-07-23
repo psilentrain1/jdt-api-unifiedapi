@@ -3,19 +3,12 @@ import * as Sentry from "@sentry/node";
 import * as db from "../controllers/jmdm26.js";
 import { requireSession } from "../../middleware/authMiddleware.js";
 import { logger } from "../../services/logging.js";
+import type { CrudHandlers } from "../../common/types.js";
 import type { ResumeInfo, SiteSetting } from "../utils/types.js";
 
 const log = logger.child({ module: "JMDM26 Routes" });
 
 export const router = express.Router();
-
-type CrudHandlers = {
-  getAll: express.RequestHandler;
-  add: express.RequestHandler;
-  getOne: express.RequestHandler;
-  update: express.RequestHandler;
-  delete: express.RequestHandler;
-};
 
 function createCrudRoutes(
   resource: string,
