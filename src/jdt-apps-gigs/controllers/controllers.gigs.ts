@@ -69,3 +69,123 @@ function getDocumentCollection() {
 function getTemplateCollection() {
   return client.db("jdt_apps_gigs").collection<Template>("template");
 }
+
+export function getAllProfiles() {}
+
+export function getProfile() {}
+
+export function addProfile() {}
+
+export function updateProfile() {}
+
+export function deleteProfile() {}
+
+export function getAllSettings() {}
+
+export function getSetting() {}
+
+export function addSetting() {}
+
+export function updateSetting() {}
+
+export function deleteSetting() {}
+
+export function getAllBusinesses() {}
+
+export function getBusiness() {}
+
+export function addBusiness() {}
+
+export function updateBusiness() {}
+
+export function deleteBusiness() {}
+
+export function getAllGigs() {}
+
+export function getGig() {}
+
+export function addGig() {}
+
+export function updateGig() {}
+
+export function deleteGig() {}
+
+export function getAllNotes() {}
+
+export function getNote() {}
+
+export function addNote() {}
+
+export function updateNote() {}
+
+export function deleteNote() {}
+
+export function getAllInvoices() {}
+
+export function getInvoice() {}
+
+export function addInvoice() {}
+
+export function updateInvoice() {}
+
+export function deleteInvoice() {}
+
+export function getAllTransactions() {}
+
+export function getTransaction() {}
+
+export function addTransaction() {}
+
+export function updateTransaction() {}
+
+export function deleteTransaction() {}
+
+export function getAllContacts() {}
+
+export function getContact() {}
+
+export function addContact() {}
+
+export function updateContact() {}
+
+export function deleteContact() {}
+
+export function getAllEvents() {}
+
+export function getEvent() {}
+
+export function addEvent() {}
+
+export function updateEvent() {}
+
+export function deleteEvent() {}
+
+export function getAllReminders() {}
+
+export function getReminder() {}
+
+export function addReminder() {}
+
+export function updateReminder() {}
+
+export function deleteReminder() {}
+
+export function getAllDocuments() {}
+
+export function getDocument() {}
+
+export function addDocument() {}
+
+export function updateDocument() {}
+
+export function deleteDocument() {}
+
+export function getAllTemplates() {}
+
+export function getTemplate() {}
+
+export function addTemplate() {}
+
+export function updateTemplate() {}
+
+export function deleteTemplate() {}
